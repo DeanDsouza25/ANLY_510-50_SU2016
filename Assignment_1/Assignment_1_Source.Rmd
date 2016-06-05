@@ -1,0 +1,106 @@
+---
+title: "ANLY510-50-SU2016_Assignment-1"
+author: "Dean D'souza"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Assignment1: Homework Exercise 1
+
+
+* __A political candidate conducted a poll and found 577 out of 900 respondents said that they would vote for her in a two-person race.__
+* __What is the 95% confidence interval for her expected proportion of the vote?__
+
+__Solution:__
+We can obtatin the confidence interval using the binconf() function in the `Hmisc` package in R as follows:
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(Hmisc)
+binconf(x=577,n=900, alpha = 0.05)
+```
+
+# Assignment1: Homework Exercise 2
+
+* __A retailer believes that its new advertising strategy will increase sales. Previously, the mean spending in 15 categories of consumer items in both the 18-34 and 35+ age groups was $90.00 with a standard deviation of $5.__
+
+  1. Write the Alternative and Null hypotheses to determine if the mean spending has increased.
+  2. After the advertising campaign, 250 customers were surveyed. The average spent by these individuals was $86.35 with a standard deviation of $23.90. Do you believe the advertising was successful?
+  3. For 500 respondents in the 35+ age group, mean and standard deviation was $88.53 and $18.29. Do you believe the advertising was successful?
+
+__Solution:__
+
+1. We write the alternative and null hypothesis as follows:
+  
+    H0: The mean spending in 15 categories of consumer items in both the 18-34 and 35+ age group remained the same.
+    HA: The mean spending in 15 categories of consumer items in both the 18-34 and 35+ age group increased.
+    
+    or in other words:
+  
+    H0: mu=90
+    HA: mu>90
+
+2. We first try to obtain the p value as follows:
+
+```{r, warning=FALSE, message=FALSE,  echo=FALSE}
+x <- 90
+s <- 23.90
+n <- 250
+xbar <- 86.35
+z <- (xbar-x)/(s/sqrt(n))
+z
+alpha<-0.05
+z.alpha<- qnorm(1-alpha)
+-z.alpha
+```
+
+As the test statistic is less than the critical value, at 0.05 significance level, we can reject the claim that the sales increased. Hence, the advertising was not really successful.
+
+3. We try to obtain the p-value as follows:
+
+```{r, warning=FALSE, message=FALSE,  echo=FALSE}
+x <- 90
+s <- 18.29
+n <- 500
+xbar <- 88.53
+z <- (xbar-x)/(s/sqrt(n))
+z
+alpha<-0.05
+z.alpha<- qnorm(1-alpha)
+-z.alpha
+```
+
+Again, as the test statistic is less than the critical value, at 0.05 significance level, we can reject the claim that the sales increased. Hence, the advertising was not that effective.
+
+# Assignment1: Homework Exercise 3
+
+* __Using the USArrestsCoasts data, is the East Coast states suffer more violent crime than all other states?__
+  + The USArrests data set is attached to the homework assignment in Moodle
+  + The East Coast states are marked as such
+  + Perform one tail t tests for murder, assault, and rape
+
+__Solution:__
+
+We perform the one tail t tests on murder, assault and rape as follows:
+
+```{r, warning=FALSE, message=FALSE}
+
+#Importing the data
+USArrests <- read.csv("C:/Users/Dean/Desktop/PrinAn2/USArrests_Coasts.csv", row.names=1)
+
+#Subsettting data for ease of use
+EC<-subset(USArrests,USArrests$East.Coast=="Yes")
+othr<-subset(USArrests,USArrests$East.Coast=="No")
+
+# One tail t test on Murder
+t.test(EC$Murder,othr$Murder, alternative = "less")
+# One tail t test on Assault
+t.test(EC$Assault,othr$Assault, alternative="less")
+# One tail t test on Rape
+t.test(EC$Rape,othr$Rape, alternative="less")
+```
+
+From the above data we can conclude that the East coast states do suffer from more Violent crime such as Murder and Assault (as can be seen from the high p-values), however in terms of Rape it is significantly less.
