@@ -1,0 +1,134 @@
+---
+title: "ANLY_510-50_HW2"
+author: "Dean D'souza"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## HomeWork Questions : Part 1
+
+* __Use theCO2 data file in R__
+  + To get definitions of the columns type help(CO2)    
+  
+```{r, warning=FALSE, message=FALSE}
+# Initializing the CO2 dataset
+data("CO2")
+# Double-checking as global environment was not describing the dataset
+head(CO2)
+# Assigning to a new variable for ease of use
+dat1<-CO2
+# Clearing memory
+remove(CO2)
+# Summary to get an idea of the data
+summary(dat1)
+```
+
+  + Calculate means & standard deviations for 4 groups broken down by Type and Treatment  
+  
+  As there are two numerical variables we try to find the mean and standard deviations across Type and Treatment for both resulting as follows:  
+  
+```{r, warning=FALSE, message=FALSE}
+# Mean and Standard Deviation based on Type and conc
+with(dat1, tapply(conc, Type, mean))
+with(dat1, tapply(conc, Type, sd))
+# Mean and Standard Deviation based on Type and uptake
+with(dat1, tapply(uptake, Type, mean))
+with(dat1, tapply(uptake, Type, sd))
+# Mean and Standard Deviation based on Treatment and conc
+with(dat1, tapply(conc, Treatment, mean))
+with(dat1, tapply(conc, Treatment, sd))
+# Mean and Standard Deviation based on Treatment and uptake
+with(dat1, tapply(uptake, Treatment, mean))
+with(dat1, tapply(uptake, Treatment, sd))
+```
+  
+  + Perform  one-way tests twice: once for Type and once for Treatment  
+
+```{r, warning=FALSE, message=FALSE}
+# One way test based on Type and conc
+oneway.test(conc ~ Type, dat1)
+# One way test based on Type and uptake
+oneway.test(uptake ~ Type, dat1)
+# One way test based on Treatment and conc
+oneway.test(conc ~ Treatment, dat1)
+# One way test based on Treatment and uptake
+oneway.test(uptake ~ Treatment, dat1)
+```
+    
+  It was interesting to see that when tested with conc the p-values were 1 indicating no relationship and that conc was more of a categorical variable. With regarrds to uptake as the p-values were significantly less, it indicated that this variable has a relationship with Type and Treatment.  
+
+  + Perform a two-way test for Type and Treatment  
+  
+```{r, warning=FALSE, message=FALSE}
+# Two way test using Type and Treatment with uptake as the response variable
+co2_lm2<-lm(uptake ~ Type + Treatment + Type*Treatment, data=dat1)
+anova(co2_lm2)
+```
+    
+  From the above results we can see that both Type and Treatment do have a relationship with uptake, however the interaction between the two had less of an impact on uptake. This would mean that individually, the relationships between the variables was important but when we consider interactions, it would not be as important and useful.
+
+## HomeWork Questions : Part 2 - mtcars  
+
+* __Use the table() function with the following combinations__ 
+
+```{r, warning=FALSE,message=FALSE}
+#Following the same steps as with the previous question
+library(car)
+data(mtcars)
+head(mtcars)
+dat2<-mtcars
+remove(mtcars)
+```
+ 
+  + The variables vs and am  
+
+```{r, warning=FALSE, message=FALSE}
+# Using table() function with vs and am
+vsam<-table(dat2$vs,dat2$am)
+```
+
+  + The variables gear and carb  
+
+```{r, warning=FALSE, message=FALSE}
+# Using table() function with gear and carb
+gearcarb<-table(dat2$gear,dat2$carb)
+```
+
+  + The variables cyl and gear  
+  
+```{r, warning=FALSE, message=FALSE}
+# Using table() function with cyl and gear
+cylgear<-table(dat2$cyl,dat2$gear)
+```
+
+* For each of the three cases above guess what the results of a Chi-Squared analysis will be 
+  + Ignore warnings for low values in the cells  
+  
+```{r, warning=FALSE, message=FALSE}
+# viewing the tables individually
+vsam
+gearcarb
+cylgear
+```
+
+From the above data we can draw the following conclusions:  
+1. For the first set of variables (vs and am) we can expect the p-value to be close to 0.05 as there may be a relationship between the two.  
+2. For the second set of variables (gear and carb) we can expect the p-value to be close to 0.05 as there may be a relationship between the two, though we can also expect it to be higher due to the variation across stacks.    
+3. For the third set of variables (cyl and gear) we can expect the p-value to be close to 0.05 with a greater chance of it being under 0.05 as there should be a good relationship between the two variables.  
+
+* __Perform a Chi-Squared analysis on the mtcars data set for each of the three cases above__
+
+```{r, warning=FALSE, message=FALSE}
+# Chisquare test on the first pair
+chisq.test(vsam)
+# Chisquare test on the first pair
+chisq.test(gearcarb)
+# Chisquare test on the first pair
+chisq.test(cylgear)
+```
+  
+  The above results confirm our assumptions for the most part with the exception of the first case, as we observe a p-value much higher than assumed. This indicates that the counts are more due to chance.
