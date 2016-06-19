@@ -9,14 +9,14 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Regression on Data Set 1: European Stock Markets
+## Regression on Data Set 1: Segmentation Data
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(caret)
-data("EuStockMarkets")
-head(EuStockMarkets)
-dataeu<-EuStockMarkets
-remove(EuStockMarkets)
+data("segmentationData")
+head(segmentationData)
+dataeu<-segmentationData
+remove(segmentationData)
 ```
 
 #### The Analysis
