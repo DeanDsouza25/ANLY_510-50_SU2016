@@ -9,25 +9,107 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Regression on Data Set 1: Segmentation Data
+## Regression on Data Set 1: Diamonds
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(caret)
-data("segmentationData")
-head(segmentationData)
-dataeu<-segmentationData
-remove(segmentationData)
+data("diamonds")
+head(diamonds)
+datadia<-diamonds
+remove(diamonds)
 ```
 
 #### The Analysis
   
-  As the dataset consists of more than two numeric rows, we go forward with determining the correlation among variables.
+  As the dataset consists of more than two numeric rows, we go forward with determining the correlation among variables. Also, in order to build the correlation matrix, we take a subset of the data, removing the columns that are not numeric.
   
 ```{r, warning=FALSE,message=FALSE}
-
+datadia1<-datadia[,c(-2,-3,-4)]
+diacor<-cor(datadia1)
+diacor
 ```
+  
+  We can see that this data set contains a number of variables that are correlated with a few exceptions. We continue with using 'findLinearCombos()' on the subsetted data.
+  
+```{r,warning=FALSE,message=FALSE}
+findLinearCombos(datadia1)
+```
+  
+  We can see that none of the columns reuire to be removed and hence continue with partioning the data by using 'createDataPartition()' into training and test sets.We consider price to be our response variable.(we also set the seed to '564738')
 
+```{r,warning=FALSE,message=FALSE}
+set.seed(564738)
+dia_sv<-createDataPartition(datadia1$price, p=0.75, list = FALSE)
+dia_train<-datadia1[dia_sv,]
+dia_test<-datadia1[-dia_sv,]
+```
+  
+  We now build the linear model as follows:
 
+```{r,warning=FALSE,message=FALSE}
+dia_lm<-lm(dia_train$price ~ . , data = dia_train)
+summary(dia_lm)
+```
+  
+  Here we can see that the value of "z" does not seem to have a significant impact on the value of price. We also take a look at the residuals.
+  
+```{r,warning=FALSE,message=FALSE}
+summary(dia_lm$residuals)
+hist(dia_lm$residuals)
+```
+  
+  We now rebuild the model, taking all the variables having a lesser impact on price out.
+
+```{r,warning=FALSE,message=FALSE}
+dia_lm2<-lm(dia_train$price ~ . -z, data = dia_train)
+summary(dia_lm2)
+```
+  
+  As all the variables have low p-values and have an effect on the estimate we consider this model to be that of the best fit.
+  
+```{r,warning=FALSE,message=FALSE}
+anova(dia_lm2,dia_lm, test="Chisq")
+```
+  
+  We now try to predict the values for our test data set.
+  
+```{r,warning=FALSE,message=FALSE}
+dia_p<-predict(dia_lm2,dia_test)
+summary(datadia1$price)
+summary(dia_train$price)
+summary(dia_test$price)
+summary(dia_p)
+```
+  
+  The above summaries shows that for the most part our initial, tranining and test data sets have the same median, with means that are close. The predicted data shows the mean value is only slightly above those of the other summaries.The median on the other hand, seems to be off by a large margin and hence we should conclude that there are other factors (like the categorical factors omitted before) that should be considered.
+  
+```{r,warning=FALSE,message=FALSE}
+set.seed(564738)
+dia_sv1<-createDataPartition(datadia$price, p=0.75, list = FALSE)
+dia_train1<-datadia[dia_sv1,]
+dia_test1<-datadia[-dia_sv1,]
+dia_lm4<-lm(dia_train1$price ~ ., data = dia_train1)
+summary(dia_lm4)
+dia_lm5<-lm(dia_train1$price ~ . -clarity^6, data = dia_train1)
+summary(dia_lm5)
+dia_lm6<-lm(dia_train1$price ~ . -clarity^6-z, data = dia_train1)
+summary(dia_lm6)
+dia_lm7<-lm(dia_train1$price ~ . -clarity^6-z-y, data = dia_train1)
+summary(dia_lm7)
+```
+  
+  The final model made here should provide the best fit considering all variables included.
+  
+```{r,warning=FALSE,message=FALSE}
+dia_p1<-predict(dia_lm7,dia_test1)
+summary(datadia$price)
+summary(dia_train$price)
+summary(dia_test$price)
+summary(dia_p1)
+```
+  
+  From the above summary we can see that we have made a better estimate, with less variation in median and mean across the initial, training, test and predicted values.
+  
 ## Regression on Data Set 2 : Sacramento
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
@@ -39,8 +121,89 @@ remove(Sacramento)
 
 #### The Analysis
   
-  As the data set consists of more than two numeric rows, we go forward with determining the correlation among variables.
+  As the data set consists of more than two numeric rows, we go forward with determining the correlation among variables.Also, in order to build the correlation matrix, we take a subset of the data, removing the columns that are not numeric.
   
 ```{r,warning=FALSE,message=FALSE}
-
+datasac1<-datasac[,c(-1,-2,-6)]
+saccor<-cor(datasac1)
+saccor
 ```
+  
+  Here we can see that the sqft variable has a greater correlation with the value of price. We go ahead with using the 'findLinearCombos()' function to see if there are any variables that can be removed.
+  
+```{r,warning=FALSE,message=FALSE}
+findLinearCombos(datasac1)
+```
+  
+  Here we see that none of the variables are eligible for removal so we continue with partioning the data into test and training sets.We consider price to be our response variable.(we also set the seed to '564738')
+  
+```{r,warning=FALSE,message=FALSE}
+set.seed(564738)
+sac_sv<-createDataPartition(datasac1$price, p=0.75, list = FALSE)
+sac_sv
+sac_train<-datasac1[sac_sv,]
+sac_test<-datasac1[-sac_sv,]
+```
+  
+  We now build the linear model:
+
+```{r,warning=FALSE,message=FALSE}
+sac_lm<-lm(price ~ . , data = sac_train)
+summary(sac_lm)
+summary(dia_lm$residuals)
+hist(dia_lm$residuals)
+```
+  
+  From the above summary we can see that the varaibles baths and latitude have lesser effect on determining the value of price, so we rebuild the linear model taking out the variables one at the time starting with baths.
+
+```{r,warning=FALSE,message=FALSE}
+sac_lm2<-lm(price ~ . -baths, data = sac_train)
+summary(sac_lm2)
+sac_lm3<-lm(price ~ . -baths-latitude, data = sac_train)
+summary(sac_lm3)
+```
+  
+  Now that all the variables have low p-values we consider the 3rd model built to be accurate, we continue to check with anova.
+  
+```{r,warning=FALSE,message=FALSE}
+anova(sac_lm3,sac_lm,test="Chisq")
+```
+  
+  We can conclude that the final model is of best fit after reducing the degrees of freedom and the Residual sum of squares. We now test our model by predicting the values of price for the test data set
+  
+```{r,warning=FALSE,message=FALSE}
+sac_p<-predict(sac_lm3,sac_test)
+summary(datasac1$price)
+summary(sac_train$price)
+summary(sac_test$price)
+summary(sac_p)
+```
+  
+  From the above set of summaries we can see that the value of the mean of the predicted values is less that the mean of the test data. The difference is significant (9000) and hence we should conclude that other factors (such as the categorical factors which were removed earlier) may play more of an important role than thought before.
+  
+```{r,warning=FALSE,message=FALSE}
+set.seed(564738)
+sac_sv1<-createDataPartition(datasac$price, p=0.75, list = FALSE)
+sac_train1<-datasac[sac_sv1,]
+sac_test1<-datasac[-sac_sv1,]
+sac_lm4<-lm(price ~ . , data = sac_train1)
+summary(sac_lm4)
+sac_lm5<-lm(price ~ . -latitude, data = sac_train1)
+summary(sac_lm5)
+sac_lm6<-lm(price ~ . -latitude-longitude, data = sac_train1)
+summary(sac_lm6)
+sac_lm7<-lm(price ~ . -latitude-longitude-baths, data = sac_train1)
+summary(sac_lm7)
+```
+  
+  We have removed as many unnecessary variables step by step as possible.
+  
+```{r,warning=FALSE,message=FALSE}
+sac_p1<-predict(sac_lm7,sac_test1)
+summary(datasac$price)
+summary(sac_train1$price)
+summary(sac_test1$price)
+summary(sac_p1)
+```
+  
+  While the new model may be considered to be accurate, it introduces new levels for categorical variables (namely city) and hence we can use the model which ommits the categorical variables till the training data set can account for all levels.
