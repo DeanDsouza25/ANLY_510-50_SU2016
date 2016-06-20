@@ -1,9 +1,10 @@
 ---
-title: "DeanDsouza_ANLY-510-50_SU2016"
+title: "Assesing Regression Assignment"
 author: "Dean D'souza"
 date: "`r Sys.Date()`"
 output: word_document
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
