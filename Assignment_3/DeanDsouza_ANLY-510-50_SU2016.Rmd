@@ -1,7 +1,7 @@
 ---
 title: "DeanDsouza_ANLY-510-50_SU2016"
 author: "Dean D'souza"
-date: "`sys.Date()`"
+date: "`r Sys.Date()`"
 output: word_document
 ---
 
@@ -140,7 +140,6 @@ findLinearCombos(datasac1)
 ```{r,warning=FALSE,message=FALSE}
 set.seed(564738)
 sac_sv<-createDataPartition(datasac1$price, p=0.75, list = FALSE)
-sac_sv
 sac_train<-datasac1[sac_sv,]
 sac_test<-datasac1[-sac_sv,]
 ```
