@@ -199,11 +199,11 @@ summary(sac_lm7)
   We have removed as many unnecessary variables step by step as possible.
   
 ```{r,warning=FALSE,message=FALSE}
-sac_p1<-predict(sac_lm7,sac_test1)
-summary(datasac$price)
-summary(sac_train1$price)
-summary(sac_test1$price)
-summary(sac_p1)
+#sac_p1<-predict(sac_lm7,sac_test1)
+#summary(datasac$price)
+#summary(sac_train1$price)
+#summary(sac_test1$price)
+#summary(sac_p1)
 ```
   
   While the new model may be considered to be accurate, it introduces new levels for categorical variables (namely city) and hence we can use the model which ommits the categorical variables till the training data set can account for all levels.
