@@ -1,0 +1,90 @@
+---
+title: "Data Manipulation in R HW"
+author: "Dean D'sozua"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```  
+  
+  
+#### Install the package HSAUR2.  
+  + After installing the packages, load the package using the library command.
+  + After the library command, pull up the data set CHFLS using the data command.
+  + If you're unsure how to do this, try help().
+  
+```{r, warning=FALSE, message=FALSE}
+## Installing package:
+# install.packages("HSAUR2")
+ 
+library(HSAUR2)
+data(CHFLS)
+
+head(CHFLS)
+``` 
+#### What are the names of the columns of the CHFLS data set?  
+  
+  The names of the colums are obtained as follows:  
+  
+```{r, warning=FALSE, message=FALSE}
+names(CHFLS)
+```  
+
+#### What is the class of CHFLS?  
+  
+  The class of CHFLS is obtained as follows:  
+  
+```{r, warning=FALSE, message=FALSE}
+class(CHFLS)
+```  
+
+#### What is the average R_income for each R_edu ?
+  
+  For each level of R_edu we obtain the average as follows:  
+  
+```{r, warning=FALSE, message=FALSE}
+moredu<-tapply(CHFLS$R_income, CHFLS$R_edu, mean)
+moredu
+``` 
+  
+#### Create a table of counts of rows by the values in the R_health column and the R_happy column. In other words, how many rows are in the data frame for each combination of distinct values in these two columns?  
+  
+```{r, warning=FALSE, message=FALSE}
+table(CHFLS$R_health,CHFLS$R_happy)
+```
+
+#### What is your working directory?  
+  
+  The working directory can be obtained as follows:  
+  
+```{r, warning=FALSE, message=FALSE}
+getwd()
+```  
+
+#### What files exist in your working directory?  
+  
+  The files contained in the working directory are as follows:  
+  
+```{r, warning=FALSE, message=FALSE}
+list.files()
+```   
+
+#### Save the data frame CHFLS as a csv file in your working directory.  Show that CHFLS exists as a csv file  
+  
+```{r, warning=FALSE, message=FALSE}
+# Write the CHFLS data frame as a .csv file in the working directory
+write.csv(CHFLS, file = "MyChfls.csv", fileEncoding = "ISO-8859-1")
+
+# Listing all files to verify that it has been written
+list.files()
+```  
+  
+  As can be seen from the above list of files, __MyChfls.csv__ file exists in the working directory showing that it was written successfully.  
+  We can also read from this file again as follows:
+
+```{r, warning=FALSE,message=FALSE}
+temp<-read.csv("MyChfls.csv", header = TRUE, sep = ",", quote = "\"", dec = ".", fill = TRUE, comment.char = "")
+head(temp)
+```
