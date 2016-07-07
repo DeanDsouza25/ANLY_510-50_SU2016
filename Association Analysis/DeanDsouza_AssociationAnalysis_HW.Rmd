@@ -28,15 +28,18 @@ grd <- read.transactions("http://fimi.ua.ac.be/data/retail.dat", format="basket"
 * Third, run the following commands and interpret the results  
 
 ```{r,warning=FALSE,message=FALSE}
-itemFrequencyPlot(grd,support=.1)  #run with support .2, .3, & .5
+par(mfrow=c(1,3)) # Setting the following graphs to appear in a single line
+itemFrequencyPlot(grd,support=.1) #run with support .2, .3, & .5
+itemFrequencyPlot(grd,support=.3)
+itemFrequencyPlot(grd,support=.5)
 summary(grd)
-inspect(grd)  #you will have to stop the listing manually
+#inspect(grd)  #you will have to stop the listing manually (Commented out to make the document smaller)
 ```
 
 * Create the rules object using apriori  
 
 ```{r,warning=FALSE,message=FALSE}
-grdar <- apriori(grd,parameter=list(supp=.05,conf=.5))
+grdar<-apriori(grd,parameter=list(supp=.05,conf=.5))
 inspect(grdar)
 ```
 
@@ -46,6 +49,7 @@ inspect(grdar)
 * Show all your steps (especially in data conversion) using knitR  
 
 ```{r,warning=FALSE,message=FALSE}
+
 ```
 
 * Next, tell what you would like to do next with the retail data  
@@ -58,7 +62,7 @@ inspect(grdar)
 ```{r,warning=FALSE,message=FALSE}
 ```
 
-* Tell me about project you would like to do with Association Analysis  
+* Tell me about the project you would like to do with Association Analysis  
   + It can be a project at work  
   + Or, suppose you could download data from data.gov on healthcare, or education, or whatever  
   + What would you like to do Assocation Analysis on if you could  
