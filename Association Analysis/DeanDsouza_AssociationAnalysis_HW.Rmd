@@ -1,0 +1,66 @@
+---
+title: "Association Analysis HW"
+author: "Dean D'souza"
+date: "July 7, 2016"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Solutions:  
+
+* First, install the package arules  
+
+```{r,warning=FALSE,message=FALSE}
+# Intalling the 'arules' package (commented out as already installed)
+# install.packages("arules")
+```
+
+* Second, load the data set using the following command  
+
+```{r,warning=FALSE,message=FALSE}
+grd <- read.transactions("http://fimi.ua.ac.be/data/retail.dat", format="basket")
+```
+
+* Third, run the following commands and interpret the results  
+
+```{r,warning=FALSE,message=FALSE}
+itemFrequencyPlot(grd,support=.1)  #run with support .2, .3, & .5
+summary(grd)
+inspect(grd)  #you will have to stop the listing manually
+```
+
+* Create the rules object using apriori  
+
+```{r,warning=FALSE,message=FALSE}
+grdar <- apriori(grd,parameter=list(supp=.05,conf=.5))
+inspect(grdar)
+```
+
+* Now that you have rules,.  
+* Find a few interesting rules  
+* Tell me something you learned from interpreting the rules  
+* Show all your steps (especially in data conversion) using knitR  
+
+```{r,warning=FALSE,message=FALSE}
+```
+
+* Next, tell what you would like to do next with the retail data  
+  + Is there a hypothesis you would like to test?  
+  + Is there data from another source you would like to add?  
+  + Is there a predictive model you would like to build?  
+  + Anything else?  
+  + Tell me what would be interesting to you to do next  
+
+```{r,warning=FALSE,message=FALSE}
+```
+
+* Tell me about project you would like to do with Association Analysis  
+  + It can be a project at work  
+  + Or, suppose you could download data from data.gov on healthcare, or education, or whatever  
+  + What would you like to do Assocation Analysis on if you could  
+
+```{r,warning=FALSE,message=FALSE}
+```
