@@ -11,21 +11,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Solutions:  
 
-* First, install the package arules  
+* __First, install the package arules__  
 
 ```{r,warning=FALSE,message=FALSE}
 # Intalling the 'arules' package (commented out as already installed)
 # install.packages("arules")
 ```
 
-* Second, load the data set using the following command  
+* __Second, load the data set using the following command__  
 
 ```{r,warning=FALSE,message=FALSE}
 library(arules)
 grd <- read.transactions("http://fimi.ua.ac.be/data/retail.dat", format="basket")
 ```
 
-* Third, run the following commands and interpret the results  
+* __Third, run the following commands and interpret the results__  
 
 ```{r,warning=FALSE,message=FALSE}
 par(mfrow=c(1,3)) # Setting the following graphs to appear in a single line
@@ -36,17 +36,17 @@ summary(grd)
 #inspect(grd)  #you will have to stop the listing manually (Commented out to make the document smaller)
 ```
 
-* Create the rules object using apriori  
+* __Create the rules object using apriori__  
 
 ```{r,warning=FALSE,message=FALSE}
 grdar<-apriori(grd,parameter=list(supp=.05,conf=.5))
 inspect(grdar)
 ```
 
-* Now that you have rules,.  
-* Find a few interesting rules  
-* Tell me something you learned from interpreting the rules  
-* Show all your steps (especially in data conversion) using knitR  
+* __Now that you have rules:__  
+* __Find a few interesting rules__  
+* __Tell me something you learned from interpreting the rules__  
+* __Show all your steps (especially in data conversion) using knitR__  
   
   According to me, the interesting rules that we obtain by running apriori on the data set are:
   + if we consider that item 39 is present in the list then 48 will also be present (roughly 57.5% and we are 1.2 times better at determining this).
@@ -67,20 +67,22 @@ inspect(subrules)
   
   Interpreting the rules requires that we have a good idea of what value of Confidence we choose for determining the important rules. We must also be mindful of the Lift so as to increase the success of guessing the other items.  
 
-* Next, tell what you would like to do next with the retail data  
-  + Is there a hypothesis you would like to test?  
-  + Is there data from another source you would like to add?  
-  + Is there a predictive model you would like to build?  
-  + Anything else?  
-  + Tell me what would be interesting to you to do next  
+* __Next, tell what you would like to do next with the retail data__  
+  + __Is there a hypothesis you would like to test?__  
+  + __Is there data from another source you would like to add?__  
+  + __Is there a predictive model you would like to build?__  
+  + __Anything else?__  
+  + __Tell me what would be interesting to you to do next__  
   
-  With regards to the retail data we pulled up, it would be interesting to add data such as the cost of the items and if possible the names of the item as well. Other data that could be included would be the age group of the purchaser (if possible), the gender of the purchaser and the quantity of the items purchased.  
-  If such data could be included then it would be interesting to test hypothesis along the lines of a purchaser of a particular age group purchasing a particular item (or set of items). We might then be able to use association analysis to roughly predict what other items 
-
-* Tell me about the project you would like to do with Association Analysis  
-  + It can be a project at work  
-  + Or, suppose you could download data from data.gov on healthcare, or education, or whatever  
-  + What would you like to do Assocation Analysis on if you could  
-
-```{r,warning=FALSE,message=FALSE}
-```
+  With regards to the retail data we pulled up, it would be interesting to add data such as the cost of the items and if possible the names of the item as well. Other data that could be included would be the age group of the purchaser (if possible), the gender of the purchaser, the quantity of the items purchased and maybe even the average income of the household.  
+  If such data could be included then it would be interesting to test hypothesis along the lines of a purchaser of a particular age group purchasing a particular item (or set of items). We might then be able to use association analysis to roughly predict what other items the purchaser would most likely be interested in or would buy along with a given item.  
+  We could build a predictive model which could predict the products a person of a particular age group would purchase or a predictive model which could predict the average expenditure of a person on groceries over a week given the household income.  
+  The next step (according to me), would be to test out these rules or to perform regression analysis to see if there is any actual relation between the various items. This might help us better understand the rules we obtained and make better assumptions on how items are sold.  
+  
+* __Tell me about the project you would like to do with Association Analysis__  
+  + __It can be a project at work__  
+  + __Or, suppose you could download data from data.gov on healthcare, or education, or whatever__  
+  + __What would you like to do Assocation Analysis on if you could__  
+  
+  A data set I would like to perform association analysis on would be the Commodity flow survey data set which includes information about the commodities shipped, their values, weight and mode of transportation, etc.  
+  I would like to see if given a product we can predict the mode of transport and possibly other products that would be shipped along with it to a particular place or if we are given a mode of transport we could predict the other products that were shipped along with it. Other questions could include given a temperature control value, can we predict the products shipped or the transport mode used.
