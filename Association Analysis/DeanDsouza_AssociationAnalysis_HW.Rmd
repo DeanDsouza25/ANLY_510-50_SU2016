@@ -47,10 +47,25 @@ inspect(grdar)
 * Find a few interesting rules  
 * Tell me something you learned from interpreting the rules  
 * Show all your steps (especially in data conversion) using knitR  
-
+  
+  According to me, the interesting rules that we obtain by running apriori on the data set are:
+  + if we consider that item 39 is present in the list then 48 will also be present (roughly 57.5% and we are 1.2 times better at determining this).
+  + Similarly, if 48 is present in the list then 39 will also be present (roughly 69.1% and we are 1.2 times better at determining this). 
+  If we consider pairs then the interesting pairs would be:
+  + {38,48} which helps us determine that 39 will also be present (roughly 76.8% of the time and we are 1.33 times better at determining this)
+  + {41,48} which helps us determine that 39 will also be present (roughly 81.7% of the time and we are 1.4 times better at determining this)
+  + {39,41} which helps us determine that 48 will also be present (roughly 64.5% of the time and we are 1.3 times better at determining this)  
+  
+  We can also see that the rules for the individual items is in a way reflected in the pair rules as the items we predict to also occur are either 39 or 48. We can obtain the important rules in R as follows:
+  
 ```{r,warning=FALSE,message=FALSE}
-
+subrules<-grdar[quality(grdar)$confidence > 0.6]
+inspect(subrules)
 ```
+  
+  The above results in eliminating one rule from the assumption (namely if 39 then 48).  
+  
+  Interpreting the rules requires that we have a good idea of what value of Confidence we choose for determining the important rules. We must also be mindful of the Lift so as to increase the success of guessing the other items.  
 
 * Next, tell what you would like to do next with the retail data  
   + Is there a hypothesis you would like to test?  
@@ -58,9 +73,9 @@ inspect(grdar)
   + Is there a predictive model you would like to build?  
   + Anything else?  
   + Tell me what would be interesting to you to do next  
-
-```{r,warning=FALSE,message=FALSE}
-```
+  
+  With regards to the retail data we pulled up, it would be interesting to add data such as the cost of the items and if possible the names of the item as well. Other data that could be included would be the age group of the purchaser (if possible), the gender of the purchaser and the quantity of the items purchased.  
+  If such data could be included then it would be interesting to test hypothesis along the lines of a purchaser of a particular age group purchasing a particular item (or set of items). We might then be able to use association analysis to roughly predict what other items 
 
 * Tell me about the project you would like to do with Association Analysis  
   + It can be a project at work  
