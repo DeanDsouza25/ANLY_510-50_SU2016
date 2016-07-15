@@ -1,0 +1,46 @@
+---
+title: "Cluster Analysis"
+author: "Dean D'souza"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Solutions:
+
+* Using the mtcars data set
+
+```{r,warning=FALSE,message=FALSE}
+data(mtcars)
+head(mtcars)
+dat<-mtcars
+remove(mtcars)
+```  
+
+* Create a kmeans object from the first, second, and third columns  
+
+```{r,warning=FALSE,message=FALSE}
+
+```  
+
+* What is the size of each cluster?  
+* What are the centers of each cluster?  
+* What is the average disp, wt, and qsec of each cluster?  
+* Describe each cluster in English.   
+* Find a data set with at least 4 columns of numeric data and a categorical column  
+* Run several scatter plots of the data  
+* Create a kmeans object from the numeric data, you can pick K to be whatever you want  
+* Determine the size of each cluster  
+* Determine the centers of each cluster  
+* Compare the clusters to the categorical data column as we did with the iris$Species column  
+* For your chosen data set,   
+  + Describe what each row of data represents  
+  + Describe each of your columns used - give a one sentence description of the column  
+  + If you know it, describe how the data was generated
+* For the clusters  
+  + Describe the size and means of clusters  
+  + Give a one- or two-word description to each cluster - in other words, give each cluster a label or name  
+* This is an exercise in turning your numeric data into something descriptive for non-statisticians  
