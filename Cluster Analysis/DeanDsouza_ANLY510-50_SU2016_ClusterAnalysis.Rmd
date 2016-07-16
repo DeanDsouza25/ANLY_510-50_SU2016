@@ -1,0 +1,175 @@
+---
+title: "Cluster Analysis"
+author: "Dean D'souza"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
+
+## Solutions:
+
+* __Using the mtcars data set__
+  
+  We setup the data as follows:  
+  
+```{r,warning=FALSE,message=FALSE}
+data(mtcars)
+head(mtcars)
+dat<-mtcars
+remove(mtcars)
+set.seed(596979)
+```  
+
+* __Create a kmeans object from the first, second, and third columns__  
+  
+  We create the kmeans object after subsetting as follows:  
+
+```{r,warning=FALSE,message=FALSE}
+cars123<-mtcars[,1:3]
+cars_km1<-kmeans(cars123, centers = 3)
+```  
+
+* __What is the size of each cluster?__  
+  
+  We can obtain the size of the three clusters as follows:  
+  
+```{r,message=FALSE,warning=FALSE}
+cars_km1$size
+```  
+
+* __What are the centers of each cluster?__  
+  
+  We can obtain the centers of the clusters as follows:  
+
+```{r,warning=FALSE,message=FALSE}
+cars_km1$centers
+```  
+
+* __What is the average disp, wt, and qsec of each cluster?__  
+  
+  We obtain the details as follows:  
+
+```{r,warning=FALSE,message=FALSE}
+cars_478_avg<-aggregate(mtcars, by=list(cars_km1$cluster), FUN = mean)
+cars_478_avg[,c(4,7,8)]
+```
+
+* __Describe each cluster in English.__   
+  
+  In the exercise above we have generated 3 clusters of sizes 14, 9 and 9 observations respectively. These clusters are centered around observations of seemingly increasing miles per gallon and decreasing displacement.
+
+* __Find a data set with at least 4 columns of numeric data and a categorical column__  
+  
+  For the purpose of this assignment I chose to combine the first four columns of State.x77 and the State.region data into a single data frame as follows:
+    
+```{r,warning=FALSE,message=FALSE}
+state<-na.omit(data.frame(state.x77[,1:4],state.region))
+```  
+
+* __Run several scatter plots of the data__  
+    
+    Please note in the following plots, the red line represents the regression line while the blue line represents the lowess line.  
+    
+```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.height=4,fig.width=6}
+par(mfrow=c(2,2))
+
+hist(state$Population)
+hist(state$Income)
+hist(state$Illiteracy)
+hist(state$Life.Exp)
+plot(state$state.region)
+
+plot(state$Population,state$Income,main = "Population vs. Income",xlab = "Population",ylab = "Income")
+abline(lm(state$Population~state$Income), col="red")
+lines(lowess(state$Population,state$Income), col="blue")
+
+plot(state$Population,state$Illiteracy,main = "Population vs. Illiteracy rate",xlab = "Population",ylab = "Illiteracy")
+abline(lm(state$Population~state$Illiteracy), col="red")
+lines(lowess(state$Population,state$Illiteracy), col="blue")
+
+plot(state$Population,state$Life.Exp,main = "Population vs. Life Expectancy",xlab = "Population",ylab = "Life Expectancy")
+abline(lm(state$Population~state$Life.Exp), col="red")
+lines(lowess(state$Population,state$Life.Exp), col="blue")
+
+plot(state$Income,state$Illiteracy,main = "Income vs. Illiteracy Rate",xlab = "Income",ylab = "Illiteract Rate")
+abline(lm(state$Income~state$Illiteracy), col="red")
+lines(lowess(state$Income,state$Illiteracy), col="blue")
+
+plot(state$Income,state$Life.Exp,main = "Income vs. Life Expectancy",xlab = "Income",ylab = "Life Expectancy")
+abline(lm(state$Income~state$Life.Exp), col="red")
+lines(lowess(state$Income,state$Life.Exp), col="blue")
+
+plot(state$Illiteracy,state$Life.Exp,main = "Illiteracy Rate vs. Life Expectancy",xlab = "Illiteracy Rate",ylab = "Life Expectancy")
+abline(lm(state$Illiteracy~state$Life.Exp), col="red")
+lines(lowess(state$Illiteracy,state$Life.Exp), col="blue")
+```  
+
+* __Create a kmeans object from the numeric data, you can pick K to be whatever you want__  
+  
+  We create the Kmeans object as follows:  
+
+```{r,warning=FALSE,message=FALSE}
+state1234<-state[,1:4]
+state_km1<-kmeans(state1234,centers = 3)
+```  
+
+* __Determine the size of each cluster__  
+  
+  The size of the clusters are as follows:  
+
+```{r,warning=FALSE,message=FALSE}
+state_km1$size
+``` 
+
+* __Determine the centers of each cluster__  
+
+  The centers of the clusters are as follows:  
+
+```{r,warning=FALSE,message=FALSE}
+state_km1$centers
+```  
+
+* __Compare the clusters to the categorical data column as we did with the iris$Species column__  
+  
+  We compare the clusters to the categorical data as follows:  
+  
+```{r,warning=FALSE,message=FALSE}
+state_play<-state
+state_play$cluster_id<-state_km1$cluster
+head(state_play)
+table(state_play$state.region,state_play$cluster_id)
+```
+
+* __For your chosen data set,__   
+  + __Describe what each row of data represents__  
+  
+  Each row of the data set contains observations about the various states in the U.S.A. which includes average life expectancy, population, average income, percent illiteracy and region.  
+  
+  + __Describe each of your columns used - give a one sentence description of the column__  
+    
+  We now continue to describe the data with it's variables:
+  
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+disc<-data.frame(c(1:5),c("Population","Income","Illiteracy","Life Exp.","state.region"),c("population estimate as of July 1, 1975","per capita income (1974)","illiteracy (1970, percent of population)","life expectancy in years (1969-71)","factor giving the region (Northeast, South, North Central, West) that each state belongs to."))
+kable(disc,col.names = c("","Variable","Description"))
+```
+  
+  + __If you know it, describe how the data was generated__  
+    
+    The State.x77 data set and state.region vector were combined together for the purpose of this assignment. These are provided with base R package of datasets. As all observations are arranged according to alphabetical order of states we only needed to combine the two normally.  
+    
+* __For the clusters__  
+  + __Describe the size and means of clusters__  
+    
+    The clusters generated from the data consists of one relatively large cluster of size 27 observations, a medium cluster of 17 observations and a small cluster of 16 observations. We can also see from the table that a number of observations in the first cluster come from the Western states and a few from the other regions. Most of the southern states fall under cluster 3 whilw north central sates seem to favour clusters 1 and 3. Northeastern states seem to favour cluster 1.  
+    Overall we can see that for the most part the clusters are formed over population densities and hence we name them in the following question appropriately.  
+    
+  + __Give a one- or two-word description to each cluster - in other words, give each cluster a label or name__  
+    
+    Cluster 1 <- Low Population  
+    Cluster 2 <- High Population  
+    Cluster 3 <- Medium Population    
