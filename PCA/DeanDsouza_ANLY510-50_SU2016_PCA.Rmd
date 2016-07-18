@@ -8,6 +8,7 @@ output: word_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(caret)
+library(e1071)
 set.seed(695949)
 ```
 
@@ -44,11 +45,19 @@ plot(dat$Rape,dat$UrbanPop,main="Rape vs. Ubran Population",xlab="Rapes",ylab="U
   3. Run PCA once on the columns Murder, Assault, and Rape using the first method described in this lecture  
   
 ```{r,warning=FALSE,message=FALSE}
+USArrests_pca1<-princomp(~Murder+Assault+Rape+UrbanPop,data=dat)
+attributes(USArrests_pca1)
+USArrests_pca1$scores
+USArrests_pca1
+summary(USArrests_pca1)
 ```  
 
   4. Run PCA again on the columns Murder, Assault, and Rape using the second method from the caret package  
   
 ```{r,warning=FALSE,message=FALSE}
+USArrests_pca2<-preProcess(dat,method = c("BoxCox","center","scale","pca"),thresh = 0.95)
+attributes(USArrests_pca2)
+summary(USArrests_pca2)
 ```  
 
   5. Be sure to create the scores from the PCA object when using the caret package method  
@@ -57,8 +66,6 @@ plot(dat$Rape,dat$UrbanPop,main="Rape vs. Ubran Population",xlab="Rapes",ylab="U
 ```  
 
   6. Explain why BoxCoc, center, and scale functions were used in the second method  
-  
-```{r,warning=FALSE,message=FALSE}
-```  
+
 
 
