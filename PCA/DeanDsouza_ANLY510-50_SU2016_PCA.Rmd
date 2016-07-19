@@ -14,25 +14,28 @@ set.seed(695949)
 
 ## Solutions
 
-* Apply both methods of PCA (princomp and preProcess) to the USArrests data supplied in Moodle  
-
+* __Apply both methods of PCA (princomp and preProcess) to the USArrests data supplied in Moodle__  
+  
+  
 ```{r,warning=FALSE,message=FALSE}
 #Setting up the data
 dat<-read.csv("~/PrinAn2/USArrests.csv", row.names=1) #importing into dat for convenience
 # head(dat) #Commented out as not necessary
 ```  
 
-  1. First, run a correlation matrix on the 4 numeric columns, and explain which you think should be removed if you were trying to predict UrbanPop from Murder, Assault, and Rape  
-  
+  1. __First, run a correlation matrix on the 4 numeric columns, and explain which you think should be removed if you were trying to predict UrbanPop from Murder, Assault, and Rape__  
+    
+    
 ```{r,warning=FALSE,message=FALSE}
 cor(dat)
 ```  
   
-  As we can see from the above correlation matrix, 'UrbanPop' is closely related to 'Murder' and further related to 'Rape' but not that correlated to 'Assault'.
+  As we can see from the above correlation matrix, 'UrbanPop' is closely related to 'Rape' covariate. However we can also see that 'Murder' and 'Assault' covariates, while less correlated to UrbanPop, are closely correlated to each other. As 'Murder' seems to be less correlated to 'UrbanPop', in my opinion, we can remove 'Murder', keeping 'Assault' and 'Rape' in our model. (We might also choose to exclude 'Assault' instead as it has more correlation to 'Rape' as compared to 'Murder', which could possibly further reduce correlation among covariates) 
 
-  2. Next, create scatter plots of Murder, Assault, and Rape versus UrbanPop  
-  
-```{r,warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.align='center',echo=FALSE}
+  2. __Next, create scatter plots of Murder, Assault, and Rape versus UrbanPop__  
+    
+    
+```{r,warning=FALSE,message=FALSE,fig.height=4,fig.width=7,fig.align='center',echo=FALSE}
 par(mfrow=c(1,3))
 
 plot(dat$Murder,dat$UrbanPop,main="Murder vs. Ubran Population",xlab="Murders",ylab="Urban Population" )
@@ -42,8 +45,11 @@ plot(dat$Assault,dat$UrbanPop,main="Assault vs. Ubran Population",xlab="Assaults
 plot(dat$Rape,dat$UrbanPop,main="Rape vs. Ubran Population",xlab="Rapes",ylab="Urban Population" )
 ```  
 
-  3. Run PCA once on the columns Murder, Assault, and Rape using the first method described in this lecture  
-  
+  3. __Run PCA once on the columns Murder, Assault, and Rape using the first method described in this lecture__  
+      
+      
+    We perfrom PCA using the princomp() function as follows:  
+    
 ```{r,warning=FALSE,message=FALSE}
 USArrests_pca1<-princomp(~Murder+Assault+Rape+UrbanPop,data=dat)
 attributes(USArrests_pca1)
@@ -51,21 +57,32 @@ USArrests_pca1$scores
 USArrests_pca1
 summary(USArrests_pca1)
 ```  
-
-  4. Run PCA again on the columns Murder, Assault, and Rape using the second method from the caret package  
   
+  
+  From this summary data we can conclude that component 1 is sufficient to explain more than 95% of the data.
+
+  4. __Run PCA again on the columns Murder, Assault, and Rape using the second method from the caret package__  
+      
+      
+    We perform PCA using preProcess from the 'caret' package as follows ('caret' and other required packages were loaded earlier in the 'knitr' setup portion):  
+    
 ```{r,warning=FALSE,message=FALSE}
 USArrests_pca2<-preProcess(dat,method = c("BoxCox","center","scale","pca"),thresh = 0.95)
 attributes(USArrests_pca2)
 summary(USArrests_pca2)
 ```  
 
-  5. Be sure to create the scores from the PCA object when using the caret package method  
-  
+  5. __Be sure to create the scores from the PCA object when using the caret package method__  
+      
+      
+    We create the scores as follows:  
+    
 ```{r,warning=FALSE,message=FALSE}
+USArrests_num_pca<-predict(USArrests_pca2,dat)
+head(USArrests_num_pca)
 ```  
 
-  6. Explain why BoxCoc, center, and scale functions were used in the second method  
-
-
-
+  6. __Explain why BoxCox, center, and scale functions were used in the second method__  
+    
+    
+  In the second method for PCA we passed the 'BoxCox' parameter/fucntion to the preProcess() function as this parameter specifies to the function to transform the data to be more normally distributed prior to PCA. We passed the 'center' parameter/function to specify that the mean should be subtracted from each value prior to PCA. The 'scale' parameter/function was passed to specify that each value should be divided by the standard deviation prior to PCA. These methods are called so that we can pre process the data to be more suitable for PCA.  
