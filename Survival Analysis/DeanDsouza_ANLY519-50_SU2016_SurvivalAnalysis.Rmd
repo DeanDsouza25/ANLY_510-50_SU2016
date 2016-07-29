@@ -1,0 +1,111 @@
+---
+title: "Survival Analysis"
+author: "Dean D'souza"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Solution:  
+  
+  The following code chunk displays the setup procedure:  
+  
+```{r,warning=FALSE,message=FALSE}
+#Installing the 'coin' & 'TH.data' package (commented out as not necessary)
+#install.packages("coin")
+#install.packages("TH.data")
+
+# Loading the data sets
+library("coin")
+library("TH.data")
+
+data("glioma")
+data("GBSG2")
+
+head(glioma)
+head(GBSG2)
+
+summary(glioma)
+summary(GBSG2)
+```
+  
+* After loading the two data sets, execute the commands in this lecture three times:  
+  + First, using glioma and the two groupings based on the sex column  
+  
+```{r,warning=FALSE,message=FALSE}
+# Checking the levels of 'sex' covariate
+levels(glioma$sex)
+
+# Comparing time across sexes
+table(subset(glioma, sex=="Female", select = time))
+table(subset(glioma, sex=="Male", select = time))
+
+# Building the 'Surv' Object
+surv1<-Surv(time=glioma$time, event=glioma$event)
+summary(surv1)
+
+# Estimating the Survival Curve
+survf1<-survfit(formula = surv1~glioma$sex, data=glioma)
+summary(survf1)
+
+# Plotting the results
+plot(survf1, lty=1:2, main="Glioma (Splitting based on sex)", ylab = "Probability", xlab="Survival Time")
+legend("topright",legend=levels(glioma$sex), lty=1:2)
+```  
+  
+  The above calculations and plot shows us that as time increases, initially Males have a higher chance of survival, but later, we observe that Females have a higher chance of survival. This eventually balances out to less than 40% chance of survival after more than 50 months.  
+  
+  + Second, using glioma and the two groupings based on the histology column  
+    
+```{r,warning=FALSE,message=FALSE}
+# Checking the levels of 'histology' covariate
+levels(glioma$histology)
+
+# Comparing time across hoistology levels
+table(subset(glioma, histology=="GBM", select = time))
+table(subset(glioma, histology=="Grade3", select = time))
+
+# Building the 'Surv' Object
+surv2<-Surv(time=glioma$time, event=glioma$event)
+summary(surv2)
+
+# Estimating the Survival Curve
+survf2<-survfit(formula = surv2~glioma$sex, data=glioma)
+summary(survf2)
+
+# Plotting the results
+plot(survf2, lty=1:2, main="Glioma (Splitting based on Histology)", ylab = "Probability", xlab="Survival Time")
+legend("topright",legend=levels(glioma$histology), lty=1:2)
+```  
+  
+  As seen with the case of splitting based on sex, splitting based on histology leads to similar results with the `GBM` and `Grade3` histologies as seen by the plot above.  
+  
+  + Third, using the GBSG2 data frame from the TH.data package, using the column horTH to split the data frame into two groups  
+  
+```{r,warning=FALSE,message=FALSE}
+# Checking the levels of 'horTH' covariate
+levels(GBSG2$horTh)
+
+# Comparing time across horTH
+table(subset(GBSG2, GBSG2$horTH=="no", select = time))
+table(subset(GBSG2, GBSG2$horTH=="yes", select = time))
+
+# Building the 'Surv' Object
+surv3<-Surv(time=GBSG2$time, event=GBSG2$cens)
+summary(surv3)
+
+# Estimating the Survival Curve
+survf3<-survfit(formula = surv3~GBSG2$horTh, data=GBSG2)
+summary(survf3)
+
+# Plotting the results
+plot(survf3, lty=1:2, main="GBSG2 (Split based on horTH)", ylab = "Probability", xlab="Survival Time")
+legend("topright",legend=levels(GBSG2$horTh), lty=1:2)
+```  
+  
+  From the above plot and calculations we can see that as time progresses, those who receive hormonal therapy have a better chance at survival, with those not recieving the therapy having a similarly steady decrease with a sudden drop in survival after roughly 2450 days.  
+  
+
