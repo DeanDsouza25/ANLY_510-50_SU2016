@@ -1,0 +1,60 @@
+---
+title: 'Forecasting: Holt-Winters'
+author: "Dean D'souza"
+date: "August 2, 2016"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+data(Nile)
+head(Nile)
+set.seed(695949)
+```
+
+## Solutions:
+
+* Repeat the ts(), HoltWinters(), predict() and plot() functions on the Nile data as in these slides  
+  
+  We execute the R commands found in the lecture slides as follow:  
+  
+```{r,warning=FALSE,message=FALSE, fig.align='center',fig.height=4,fig.width=7}
+# Setting up the nile data to be usable
+nile.ts<-ts(Nile,start=1,frequency=10)
+summary(nile.ts)
+
+# Plotting the original data
+plot(nile.ts)
+
+#Creating the Holt-Winters object without gamma
+nile.hw1<-HoltWinters(nile.ts,gamma = FALSE)
+nile.hw1
+
+# Plotting the Holt-Winters object
+plot(nile.hw1)
+
+# Predicting future values with the Holt-winters Object
+nile.p1<-predict(nile.hw1, n.ahead=10)
+ts.plot(nile.ts,nile.p1)
+
+#Creating the Holt-Winters object with gamma
+nile.hw2<-HoltWinters(nile.ts)
+nile.hw2
+
+# Plotting the Holt-Winters object
+plot(nile.hw2)
+
+# Predicting future values with the Holt-winters Object
+nile.p2<-predict(nile.hw2, n.ahead=10)
+ts.plot(nile.ts,nile.p2)
+```  
+
+* Repeat the same functions with different values of alpha, beta, and gamma of your choosing on.  
+  + AirPassengers  
+  + EuStockMarkets  
+  + When using the EuStockMarkets, choose one column  
+
+```{r,warning=FALSE,message=FALSE}
+
+```  
+
