@@ -7,8 +7,19 @@ output: word_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-data(Nile)
+
+# Setting up Nile Data
+data("Nile")
 head(Nile)
+
+# Setting up the AirPassengers data
+data("AirPassengers")
+head(AirPassengers)
+
+#Setting up the EUStockMarkets data
+data("EuStockMarkets")
+head(EuStockMarkets)
+
 set.seed(695949)
 ```
 
@@ -37,24 +48,84 @@ plot(nile.hw1)
 nile.p1<-predict(nile.hw1, n.ahead=10)
 ts.plot(nile.ts,nile.p1)
 
-#Creating the Holt-Winters object with gamma
+#Creating the new Holt-Winters object with gamma
 nile.hw2<-HoltWinters(nile.ts)
 nile.hw2
 
-# Plotting the Holt-Winters object
+# Plotting the new Holt-Winters object
 plot(nile.hw2)
 
-# Predicting future values with the Holt-winters Object
+# Predicting future values with the new Holt-winters Object
 nile.p2<-predict(nile.hw2, n.ahead=10)
 ts.plot(nile.ts,nile.p2)
 ```  
 
 * Repeat the same functions with different values of alpha, beta, and gamma of your choosing on.  
   + AirPassengers  
+  
+  We perform the functions on the AirPassengers data set present in base R as follows:  
+  
+```{r,warning=FALSE,message=FALSE}
+# creating the Holt-Winters Object
+ap.hw1<-HoltWinters(AirPassengers, alpha = 0.25,beta = FALSE, gamma = TRUE)
+ap.hw1
+
+# PLotting the Model
+plot(ap.hw1)
+
+# Predicting the Future values
+ap.p1<-predict(ap.hw1, n.ahead=10)
+ts.plot(AirPassengers,ap.p1)
+
+# creating the Holt-Winters Object such that the algorithm sets alpha, beta and gamma
+ap.hw2<-HoltWinters(AirPassengers)
+ap.hw2
+
+# PLotting the Model
+plot(ap.hw2)
+
+# Predicting the Future values
+ap.p2<-predict(ap.hw2, n.ahead=10)
+ts.plot(AirPassengers,ap.p2)
+```  
+  
+  In the first model created above we set alpha to 0.25 to get a closer approximation for predicting the values. We also set Beta to False to perform exponential smoothing. This is to done so as to maintain the upward trend seen in the data. We also set gamma to true in order to take into account the cyclical effect seen in the data. The second model gives us the actual alpha, beta and gamma values that should be used for a model with good fit.  
+  
   + EuStockMarkets  
   + When using the EuStockMarkets, choose one column  
+  
+We perform the functions on the EUStockMarkets data set present in base R as follows (The column chosen for the purposes of this assignment is the UK FTSE column):
 
 ```{r,warning=FALSE,message=FALSE}
+# Getting the data ready for Holt-Winters
+FTSE<-EuStockMarkets[,4]
+head(FTSE)
 
+# Verifying the time series
+plot(FTSE)
+
+# creating the Holt-Winters Object
+FTSE.hw1<-HoltWinters(FTSE, alpha = 0.9 ,beta = FALSE , gamma = FALSE)
+FTSE.hw1
+
+# PLotting the Model
+plot(FTSE.hw1)
+
+# Predicting the Future values
+FTSE.p1<-predict(FTSE.hw1, n.ahead=10)
+ts.plot(FTSE,FTSE.p1)
+
+# creating the Holt-Winters Object such that the algorithm sets alpha, beta and gamma
+FTSE.hw2<-HoltWinters(FTSE)
+FTSE.hw2
+
+# PLotting the Model
+plot(FTSE.hw2)
+
+# Predicting the Future values
+FTSE.p2<-predict(FTSE.hw2, n.ahead=10)
+ts.plot(FTSE,FTSE.p2)
 ```  
-
+  
+  In the first model created above we set alpha to 0.9 to get a closer approximation for predicting the values. We also set Beta to FALSE to perform exponential smoothing. We also set gamma to False as we do not want to fit a cyclical model (as the data does not show significant cyclical effects). The second model gives us the actual alpha, beta and gamma values that should be used for a model with good fit.  
+  
