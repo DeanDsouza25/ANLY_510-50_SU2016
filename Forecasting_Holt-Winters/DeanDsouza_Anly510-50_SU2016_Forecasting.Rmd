@@ -66,22 +66,22 @@ ts.plot(nile.ts,nile.p2)
   We perform the functions on the AirPassengers data set present in base R as follows:  
   
 ```{r,warning=FALSE,message=FALSE}
-# creating the Holt-Winters Object
+# Creating the Holt-Winters Object
 ap.hw1<-HoltWinters(AirPassengers, alpha = 0.25,beta = FALSE, gamma = TRUE)
 ap.hw1
 
-# PLotting the Model
+# Plotting the Model
 plot(ap.hw1)
 
 # Predicting the Future values
 ap.p1<-predict(ap.hw1, n.ahead=10)
 ts.plot(AirPassengers,ap.p1)
 
-# creating the Holt-Winters Object such that the algorithm sets alpha, beta and gamma
+# Creating the Holt-Winters Object such that the algorithm sets alpha, beta and gamma
 ap.hw2<-HoltWinters(AirPassengers)
 ap.hw2
 
-# PLotting the Model
+# Plotting the Model
 plot(ap.hw2)
 
 # Predicting the Future values
@@ -104,22 +104,22 @@ head(FTSE)
 # Verifying the time series
 plot(FTSE)
 
-# creating the Holt-Winters Object
+# Creating the Holt-Winters Object
 FTSE.hw1<-HoltWinters(FTSE, alpha = 0.9 ,beta = FALSE , gamma = FALSE)
 FTSE.hw1
 
-# PLotting the Model
+# Plotting the Model
 plot(FTSE.hw1)
 
 # Predicting the Future values
 FTSE.p1<-predict(FTSE.hw1, n.ahead=10)
 ts.plot(FTSE,FTSE.p1)
 
-# creating the Holt-Winters Object such that the algorithm sets alpha, beta and gamma
+# Creating the Holt-Winters Object such that the algorithm sets alpha, beta and gamma
 FTSE.hw2<-HoltWinters(FTSE)
 FTSE.hw2
 
-# PLotting the Model
+# Plotting the Model
 plot(FTSE.hw2)
 
 # Predicting the Future values
