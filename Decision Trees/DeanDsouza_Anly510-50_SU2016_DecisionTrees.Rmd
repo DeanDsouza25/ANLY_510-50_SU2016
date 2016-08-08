@@ -1,0 +1,33 @@
+---
+title: "Decision Trees"
+author: "Dean D'souza"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Soltuions:
+
+* First, build a decision tree using Rattle just as we did here on a data set of your choosing.  
+  + Take several screen shots of your work and paste into a MS Word, LibreOffice, of pdf file, explain each step
+  + Tell me what you learned from the decision tree  
+
+```{r,warning=FALSE,message=FALSE}
+```
+
+* Build another model of your choice using Rattle on the same data set  
+  + You can run Association Analysis, PCA, Regression, .whatever
+  + Tell me what you learned from this analysis and from the decision tree combined
+
+
+```{r,warning=FALSE,message=FALSE}
+```
+
+* Tell me why you prefer RStudio over Rattle or the opposite or some other tool of your choice over Rstudio.  Just looking for opinions here, but I am curious HOW you evaluate the different tools.   
+
+
+```{r,warning=FALSE,message=FALSE}
+```
