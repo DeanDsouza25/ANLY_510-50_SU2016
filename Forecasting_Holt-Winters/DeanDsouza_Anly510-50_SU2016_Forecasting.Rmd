@@ -59,6 +59,8 @@ plot(nile.hw2)
 nile.p2<-predict(nile.hw2, n.ahead=10)
 ts.plot(nile.ts,nile.p2)
 ```  
+  
+  The above R commands are the ones executed during the lecture and are used to demonstrate how to perform Holt-Winters and the importance of setting a gamma value for the algorithm.
 
 * Repeat the same functions with different values of alpha, beta, and gamma of your choosing on.  
   + AirPassengers  
@@ -89,7 +91,9 @@ ap.p2<-predict(ap.hw2, n.ahead=10)
 ts.plot(AirPassengers,ap.p2)
 ```  
   
-  In the first model created above we set alpha to 0.25 to get a closer approximation for predicting the values. We also set Beta to False to perform exponential smoothing. This is to done so as to maintain the upward trend seen in the data. We also set gamma to true in order to take into account the cyclical effect seen in the data. The second model gives us the actual alpha, beta and gamma values that should be used for a model with good fit.  
+  In the first model created above we set alpha to 0.25 to get a closer approximation for predicting the values. We also set Beta to False to perform exponential smoothing. This is done so as to maintain the upward trend seen in the data. We also set gamma to true in order to take into account the cyclical effect seen in the data.  
+    
+    The second model gives us the actual alpha, beta and gamma values that should be used for a model with good fit (assumed). This is essentially what happens when we do not supply the algorithm with alpha, beta and gamma values, forcing the algorithm to select the best possible values. We might argue that we should calculate the required values ourselves, but the values observed does help us get a better approximation.
   
   + EuStockMarkets  
   + When using the EuStockMarkets, choose one column  
@@ -127,5 +131,6 @@ FTSE.p2<-predict(FTSE.hw2, n.ahead=10)
 ts.plot(FTSE,FTSE.p2)
 ```  
   
-  In the first model created above we set alpha to 0.9 to get a closer approximation for predicting the values. We also set Beta to FALSE to perform exponential smoothing. We also set gamma to False as we do not want to fit a cyclical model (as the data does not show significant cyclical effects). The second model gives us the actual alpha, beta and gamma values that should be used for a model with good fit.  
+  In the first model created above we set alpha to 0.9 to get a closer approximation for predicting the values. We also set Beta to FALSE to perform exponential smoothing. We also set gamma to False as we do not want to fit a cyclical model (as the data does not show significant cyclical or seasonal effects).  
+  The second model gives us the actual alpha, beta and gamma values that should be used for a model with good fit (assumed). Once again, the values that the algorithm calculates can be quite helpful.
   
